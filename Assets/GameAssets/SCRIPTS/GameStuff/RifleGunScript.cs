@@ -5,10 +5,10 @@ using MouseLooking;
 using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 
-namespace primaryGunScript
+namespace rifleGunScript
 {
 
-    public class GunScript : MonoBehaviour
+    public class RifleGunScript : MonoBehaviour
     {
         //Audio resources
         AudioSource audioSource;
@@ -28,11 +28,13 @@ namespace primaryGunScript
         public float maxnumberOfBullet = 10;
         public string currentAmmo;
         public Text bulletText;
+        public float rate = 1;
 
 
         public ParticleSystem muzzleFlash;
         public GameObject impactEffect;
 
+        private Coroutine _current;
 
         public Magazine magazine;
         public XRBaseInteractor socketInteractor;
@@ -66,7 +68,8 @@ namespace primaryGunScript
 
             if (magazine && magazine.numberOfBullet > 0)
             {
-                Shoot();
+                if (_current != null) StopCoroutine(_current);
+                _current = StartCoroutine(Shoot());
             }
             else
             {
@@ -74,35 +77,47 @@ namespace primaryGunScript
             }
         }
 
+        public void StopTheTrigger()
+        {
+            if (_current != null) StopCoroutine(_current);
+        }
+
 
         //ON shoot play audio, check for enemy, and display muzzle flash and impact effect
-        void Shoot()
+        private IEnumerator Shoot()
         {
-            audioSource.PlayOneShot(GunShot);
-
-            magazine.numberOfBullet--;
-            currentAmmo = magazine.numberOfBullet.ToString();
-            bulletText.text = (currentAmmo + "/" + maxnumberOfBullet);
-
-            muzzleFlash.Play();
-            RaycastHit hit;
-            if (Physics.Raycast(shootPoint.transform.position, shootPoint.transform.forward, out hit, range))
+            while (true && magazine.numberOfBullet > 0)
             {
-                Enemy target = hit.transform.GetComponent<Enemy>();
-                if (target != null)
-                {
-                    audioSource.PlayOneShot(HitMarker);
-                    target.TakeDamage(damage);
-                }
+                audioSource.PlayOneShot(GunShot);
 
-                if (hit.rigidbody != null)
-                {
-                    hit.rigidbody.AddForce(-hit.normal * impactForce);
-                }
+                magazine.numberOfBullet--;
+                currentAmmo = magazine.numberOfBullet.ToString();
+                bulletText.text = (currentAmmo + "/" + maxnumberOfBullet);
 
-                GameObject impactGO = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
-                Destroy(impactGO, 1f);
+                muzzleFlash.Play();
+                RaycastHit hit;
+                if (Physics.Raycast(shootPoint.transform.position, shootPoint.transform.forward, out hit, range))
+                {
+                    Enemy target = hit.transform.GetComponent<Enemy>();
+                    if (target != null)
+                    {
+                        audioSource.PlayOneShot(HitMarker);
+                        target.TakeDamage(damage);
+                    }
+
+                    if (hit.rigidbody != null)
+                    {
+                        hit.rigidbody.AddForce(-hit.normal * impactForce);
+                    }
+
+                    GameObject impactGO = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+                    Destroy(impactGO, 1f);
+
+                    yield return new WaitForSeconds(1f / rate);
+                }
             }
         }
     }
 }
+
+
