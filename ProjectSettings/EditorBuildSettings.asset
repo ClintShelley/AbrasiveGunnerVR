@@ -11,6 +11,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GameScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/DeadScene.unity
+    guid: c2061fc738946dc498f9e91605c77844
+  - enabled: 1
+    path: Assets/Scenes/EndScene.unity
+    guid: a353846b854853546a242464bd5c7a1a
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 47d96ccb2ab52ad4d880a77ec4ae1d5b, type: 2}
     Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: ffba0a775dae80b44ae30176216249a2, type: 2}

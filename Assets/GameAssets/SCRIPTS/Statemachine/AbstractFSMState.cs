@@ -39,9 +39,7 @@ public abstract class AbstractFSMState : ScriptableObject
     public virtual void OnEnable()
     {
         ExecutionState = ExecutionState.NONE;
-
         player = GameObject.Find("XR Rig");
-       
     }
 
     public virtual bool EnterState()

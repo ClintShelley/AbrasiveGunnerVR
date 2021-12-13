@@ -7,6 +7,7 @@ using UnityEngine.AI;
 using NPCCode;
 
 [CreateAssetMenu(fileName="PatrolState", menuName = "Unity-FSM/States/Patrol", order = 2)]
+//this patrol state is for the patrolling enemy type
 public class PatrolState : AbstractFSMState
 {
 
@@ -54,12 +55,13 @@ public class PatrolState : AbstractFSMState
     {
         if (EnteredState)
         {
-            
-            if (Vector3.Distance(_navMeshAgent.transform.position, player.transform.position) <= 15f)
+            //if player is this distance start to chase and attack
+            if (Vector3.Distance(_navMeshAgent.transform.position, player.transform.position) <= 25f)
             {
                 _fsm.EnterState(FSMStateType.ATTACK);
             }
-            else if (Vector3.Distance(_navMeshAgent.transform.position, _patrolPoints[_patrolPointIndex].transform.position) >= 10f)
+            //check range of points in this distance
+            else if (Vector3.Distance(_navMeshAgent.transform.position, _patrolPoints[_patrolPointIndex].transform.position) >= 6f)
             {
                 _fsm.EnterState(FSMStateType.IDLE);
             }

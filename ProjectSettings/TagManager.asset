@@ -7,6 +7,7 @@ TagManager:
   - Waypoint
   - glockMag
   - rifleMag
+  - Weapon
   layers:
   - Default
   - TransparentFX

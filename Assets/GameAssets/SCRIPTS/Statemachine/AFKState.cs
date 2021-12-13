@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [CreateAssetMenu(fileName = "AFKState", menuName = "Unity-FSM/States/AFK", order = 4)]
+//this idle state is for the AFK enemy type
 public class AFKState : AbstractFSMState
 {
     [SerializeField]
@@ -33,7 +34,7 @@ public class AFKState : AbstractFSMState
     {
         if (EnteredState)
         {
-            if (Vector3.Distance(_navMeshAgent.transform.position, player.transform.position) <= 15f)
+            if (Vector3.Distance(_navMeshAgent.transform.position, player.transform.position) <= 30f)
             {
                 _fsm.EnterState(FSMStateType.AATTACK);
             }
